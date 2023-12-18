@@ -1,0 +1,56 @@
+﻿@model List<OnlineShopWebApp.Areas.Admin.Models.RoleVM>
+
+<div>
+    <div>
+        <h3 class="text-center">Список ролей</h3>
+    </div>
+    <div class="row">
+        <div class="border">
+            @await Html.PartialAsync("AdminPanel")
+        </div>
+        <div class="col-9">
+            <div>
+                <div>
+                    <a asp-area="Admin" asp-controller="Role" asp-action="Add">Добавить новую роль</a>
+                </div>
+                @if (@Model?.Count == 0)
+                {
+                    <div class="text-center">
+                        <span>Список ролей пуст.</span>
+                    </div>
+                }
+                else
+                {
+                <div class="col">
+                    <table class="table border">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Название</th>
+                                <th>Описание функции</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var role in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @role.Id
+                                    </td>
+                                    <td>
+                                        @role.Name
+                                    </td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="Role" asp-action="Delete" asp-route-Id="@role.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

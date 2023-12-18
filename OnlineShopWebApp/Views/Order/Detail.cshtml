@@ -1,0 +1,40 @@
+﻿@model OrderVM
+@{
+    ViewData["Title"] = "Заказ № " + Model.Id;
+}
+<div>
+    <div>
+        <h3>Заказ №@Model.Id</h3>
+        <sup>от: @Model.DateOrder.ToLocalTime()</sup>
+    </div>
+    <div>Фамилия и имя покупателя: @Model.FirstName @Model.SecondName</div>
+    <div>Адрес доставки: @Model.Address</div>
+    <div>Телефон: @Model.Phone</div>
+    <div>email: @Model.Email</div>
+    <div>Статус заказа: @EnumHelper.GetDisplayName(Model.Status)</div>
+    <br />
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Товар</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Покупатель</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Product.Name</td>
+                        <td>@item.Product.Cost</td>
+                        <td>@item.Amount</td>
+                        <td>@item.Cost</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-right">Стоимость заказа @Model.Cost рублей</div>
+    </div>
+</div>

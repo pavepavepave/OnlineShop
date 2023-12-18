@@ -1,0 +1,39 @@
+﻿@model OnlineShopWebApp.Areas.Admin.Models.RoleVM
+
+<form method="post">
+    <div>
+        <div>
+            <h3 class="text-center">Список ролей</h3>
+        </div>
+        <div class="row">
+            <div class="border">
+                @await Html.PartialAsync("AdminPanel")
+            </div>
+            <div class="col-9 border">
+                <div>
+                    <div>
+                        <h4>Добавление новой роли:</h4>
+                    </div>
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Название:</span>
+                            </div>
+                            <input class="form-control" asp-for="Name" />
+                        </div>
+                        <div>
+                            <span asp-validation-for="Name" />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div>
+                    <button class="btn btn-success" asp-area="Admin" asp-controller="Role" asp-action="Add" type="submit">Создать</button>
+                </div>
+                <div>
+                    <div class="font-weight-bold" asp-validation-summary="ModelOnly"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

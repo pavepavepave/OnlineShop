@@ -1,0 +1,62 @@
+﻿@model List<UserVM>
+
+<div>
+    <div>
+        <h3 class="text-center">Список пользователей</h3>
+    </div>
+    <div class="row">
+        <div class="border">
+            @await Html.PartialAsync("AdminPanel")
+        </div>
+        <div class="col-9">
+            <div>
+                <div>
+                    <a asp-area="Admin" asp-controller="User" asp-action="Add">Добавить нового пользователя</a>
+                </div>
+                @if (@Model?.Count == 0)
+                {
+                    <div class="text-center">
+                        <span>Список пользователей пуст.</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="col">
+                        <table class="table border">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>Login</th>
+                                    <th>Email</th>
+                                    <th>DateCreate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @user.Id
+                                        </td>
+                                        <td>
+                                            @user.UserName
+                                        </td>
+                                        <td>
+                                            @user.Email
+                                        </td>
+                                        <td>
+                                            @user.DateCreate
+                                        </td>
+                                        <td>
+                                            <a asp-area="Admin" asp-controller="User" asp-action="Info" asp-route-Id="@user.Id">Подробнее</a> 
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

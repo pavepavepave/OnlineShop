@@ -1,0 +1,33 @@
+﻿@model AccountVM
+
+<form method="post">
+    <div class="text-center">
+        <h3>Добавление нового пользователя [admin]</h3>
+        <div>
+            <div>
+                <input class="input-field" placeholder="Логин" asp-for="UserName" />
+            </div>
+            <div>
+                <input class="input-field" placeholder="Имя" asp-for="FirstName" />
+            </div>
+            <div>
+                <input class="input-field" placeholder="Фамилия" asp-for="SecondName" />
+            </div>
+            <div>
+                <input class="input-field" type="email" placeholder="email" asp-for="Email" />
+            </div>
+            <div>
+                <input class="input-field" type="password" placeholder="Пароль" asp-for="Password" />
+            </div>
+            <div>
+                <input class="input-field" type="password" placeholder="Подтвердить пароль" asp-for="PasswordConfirm" />
+            </div>
+            <div>
+                <div class="font-weight-bold" asp-validation-summary="All"></div>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-dark" style="width:300px" asp-area="Admin" asp-controller="User" asp-action="Add" type="submit">Зарегистрировать</button>
+        </div>
+    </div>
+</form>

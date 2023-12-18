@@ -1,0 +1,54 @@
+﻿@model List<OrderVM>
+
+<div>
+    <div>
+        <h3 class="text-center">Список заказов</h3>
+    </div>
+    <div class="row">
+        <div class="border">
+            @await Html.PartialAsync("AdminPanel")
+        </div>
+        <div class="col-9">
+            @if (Model?.Count == 0)
+            {
+                <div class="text-center">
+                    <span>Список заказов пуст.</span>
+                </div>
+            }
+            else
+            {
+                <div class="col">
+                    <table class="table border">
+                        <thead>
+                            <tr>
+                                <th>ID заказа</th>
+                                <th>Покупатель</th>
+                                <th>Статус</th>
+                                <th>Дата заказа</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.UserId @item.FirstName @item.SecondName</td>
+                                    <td>@OnlineShopWebApp.Helpers.EnumHelper.GetDisplayName(@item.Status)</td>
+                                    <td>@item.DateOrder.ToString("g")</td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="Order" asp-action="Detail" asp-route-Id="@item.Id" role="button">Изменить</a>
+                                    </td>
+                                    <td>
+                                        <a asp-area="" asp-controller="Order" asp-action="Detail" asp-route-Id="@item.Id" role="button">Подробнее</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

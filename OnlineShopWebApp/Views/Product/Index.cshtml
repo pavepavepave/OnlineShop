@@ -1,0 +1,17 @@
+﻿@model ProductVM
+
+<h5 align="center"><b>@Model.Name</b></h5>
+<div class="row">
+    <div class="col-3">
+        <img class="card-img-top" src="@Model.Image" alt="Изображение" />
+    </div>
+
+    <div class="col-6 card-body">
+        <h5>@Model.Description</h5>
+    </div>
+    <div class="col-3 card-body">
+        <h5>Стоимость: @Model.Cost руб.</h5>
+        <a class="btn btn-dark" asp-area="" asp-controller="Cart" asp-action="Add" asp-route-Id="@Model.Id" role="button">Добавить в корзину</a>
+        <a class="btn btn-primary" href="/" role="button">Продолжить покупки</a>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+﻿@model OrderVM
+
+<form method="post">
+    <div class="row">
+        <div class="col-5">
+            <div>
+                <h4>Укажите данные для доставки:</h4>
+            </div>
+            <div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Имя:</span>
+                    </div>
+                    <input class="form-control" asp-for="@Model.FirstName" />
+                </div>
+                <div>
+                    <span asp-validation-for="@Model.FirstName"></span>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Фамилия:</span>
+                    </div>
+                    <input class="form-control" asp-for="@Model.SecondName" />
+                </div>
+                <div>
+                    <span asp-validation-for="@Model.SecondName"></span>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Адрес:</span>
+                    </div>
+                    <input class="form-control" asp-for="@Model.Address" />
+                </div>
+                <div>
+                    <span asp-validation-for="@Model.Address"></span>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Телефон:</span>
+                    </div>
+                    <input placeholder="+7(XXX)XXX-XX-XX" type="text" id="phone" class="form-control" asp-for="@Model.Phone" />
+                </div>
+                <div>
+                    <span asp-validation-for="@Model.Phone"></span>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">e-mail:</span>
+                    </div>
+                    <input type="email" placeholder="XXXX@XXXX.XX" class="form-control" asp-for="@Model.Email" />
+                </div>
+                <div>
+                    <span asp-validation-for="@Model.Email"></span>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div class="text-center">
+                    <button class="btn btn-success" asp-controller="Order" asp-action="Create" type="submit">Оформить заказ</button>
+                    <a class="btn btn-primary" asp-controller="Home" asp-action="Index" role="button">Продолжить покупки</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

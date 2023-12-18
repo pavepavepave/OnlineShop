@@ -1,0 +1,49 @@
+﻿@model List<ProductVM>
+<div>
+    <div>
+        <h3 class="text-center">Список товаров</h3>
+    </div>
+    <div class="row">
+        <div class="border">
+            @await Html.PartialAsync("AdminPanel")
+        </div>
+        <div class="col-9">
+            <div>
+                <div>
+                    <a asp-controller="Product" asp-action="Add">Добавить новый продукт</a>
+                </div>
+                <div>
+                    <table class="table border">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th>Название</th>
+                                <th>Цена</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <a class="btn btn-info" asp-area="" asp-controller="Product" asp-action="Index" asp-route-Id="@item.Id" role="button">@item.Id </a>
+                                    </td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Cost</td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-Id="@item.Id">Редактировать</a>
+                                    </td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="Product" asp-action="Delete" asp-route-Id="@item.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

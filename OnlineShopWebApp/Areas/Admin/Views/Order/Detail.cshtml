@@ -1,0 +1,65 @@
+﻿@model OrderVM
+@{
+    ViewData["Title"] = "Заказ № " + @Model.Id;
+}
+<form method="post">
+    <div>
+        <div>
+            <h3 class="text-center">Список заказов</h3>
+        </div>
+        <div class="row">
+            <div class="border">
+                @await Html.PartialAsync("AdminPanel")
+            </div>
+            <div class="col-9">
+                <div>
+                    <h4>Редактирование заказа:</h4>
+                </div>
+                <div>
+                    <h5>ID заказа: @Model.Id</h5>
+                    <sup>от: @Model.DateOrder.ToLocalTime()</sup>
+                </div>
+                <div>Фамилия и имя покупателя: @Model.FirstName @Model.SecondName</div>
+                <div>Адрес доставки: @Model.Address</div>
+                <div>Телефон: @Model.Phone</div>
+                <div>email: @Model.Email</div>
+                <div>
+                    <span>Статус заказа:</span>
+                    <select class="form-select"
+                            asp-for="@Model.Status" 
+                            asp-items="@Html.GetEnumSelectList<OrderStatus>()">
+                    </select>
+                </div>
+                <div>
+                    <div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Товар</th>
+                                    <th>Цена</th>
+                                    <th>Количество</th>
+                                    <th>Покупатель</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td>@item.Product.Name</td>
+                                        <td>@item.Product.Cost</td>
+                                        <td>@item.Amount</td>
+                                        <td>@item.Cost</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <div class="text-right">Стоимость заказа @Model.Cost рублей</div>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-success" asp-area="Admin" asp-controller="Order" asp-action="Edit" asp-route-Id="@Model.Id" type="submit">Изменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

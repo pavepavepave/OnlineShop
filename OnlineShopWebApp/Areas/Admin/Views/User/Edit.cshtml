@@ -1,0 +1,83 @@
+﻿@model EditUserVM
+
+<form method="post">
+    <div>
+        <div>
+            <h3 class="text-center">Редактирование пользователя @Model.UserName</h3>
+        </div>
+        <div class="row">
+            <div class="border">
+                @await Html.PartialAsync("AdminPanel")
+            </div>
+            <div class="col-9 border">
+                <div>
+                    <div>
+                        <h4>Редактирование данных:</h4>
+                    </div>
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">ID пользователя:</span>
+                            </div>
+                            <input class="form-control" asp-for="Id" value="@Model.Id" readonly />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Имя аккаунта:</span>
+                            </div>
+                            <input class="form-control" asp-for="UserName" value="@Model.UserName" />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Имя:</span>
+                            </div>
+                            <input class="form-control" maxlength="250" asp-for="FirstName" value="@Model.FirstName" />
+                        </div>
+                        <div>
+                            <span asp-validation-for="FirstName" />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Фамилия:</span>
+                            </div>
+                            <input class="form-control" maxlength="250" asp-for="SecondName" value="@Model.SecondName" />
+                        </div>
+                        <div>
+                            <span asp-validation-for="SecondName" />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Email:</span>
+                            </div>
+                            <input class="form-control" maxlength="250" asp-for="Email" value="@Model.Email" />
+                        </div>
+                        <div>
+                            <span asp-validation-for="Email" />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="font-weight-bold" asp-validation-summary="All"></div>
+                    </div>
+                    <div>
+                        <a class="btn btn-secondary" asp-area="Admin" asp-controller="User" asp-action="Info" asp-route-Id="@Model.Id">Назад</a>
+                        <button class="btn btn-success" asp-area="Admin" asp-controller="User" asp-action="Edit" type="submit">Изменить</button>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

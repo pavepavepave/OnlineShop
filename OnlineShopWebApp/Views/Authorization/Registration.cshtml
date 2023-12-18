@@ -1,0 +1,43 @@
+﻿@model AccountVM
+
+<form method="post">
+    <div class="text-center">
+        <h3>Регистрация</h3>
+        <div>
+            <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+            <div>
+                <input class="input-field" placeholder="Логин" asp-for="UserName" />
+                <span asp-validation-for="UserName" />
+            </div>
+            <div>
+                <input class="input-field" placeholder="Имя" asp-for="FirstName" />
+                <span asp-validation-for="FirstName" />
+            </div>
+            <div>
+                <input class="input-field" placeholder="Фамилия" asp-for="SecondName" />
+                <span asp-validation-for="SecondName" />
+            </div>
+            <div>
+                <input class="input-field" type="email" placeholder="email" asp-for="Email" />
+                <span asp-validation-for="Email" />
+            </div>
+            <div>
+                <input class="input-field" type="password" placeholder="Пароль" asp-for="Password" />
+                <span asp-validation-for="Password" />
+            </div>
+            <div>
+                <input class="input-field" type="password" placeholder="Подтвердить пароль" asp-for="PasswordConfirm" />
+                <span asp-validation-for="PasswordConfirm" />
+            </div>
+            <div>
+                <div class="font-weight-bold" asp-validation-summary="ModelOnly"></div>
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-dark" style="width:300px" asp-controller="Authorization" asp-action="Registration" type="submit">Зарегистрироваться</button>
+        </div>
+        <div>
+            <a asp-area="" asp-controller="Authorization" asp-action="Login">Аккаунт уже есть.</a>
+        </div>
+    </div>
+</form>
