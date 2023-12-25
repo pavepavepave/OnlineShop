@@ -4,6 +4,7 @@ using OnlineShop.Db;
 using OnlineShop.Db.Interfaces;
 using OnlineShopWebApp.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -29,9 +30,9 @@ namespace OnlineShopWebApp.Controllers
             return View(Mapping.ToCartViewModel(cart));
         }
 
-        public IActionResult Add(Guid id)
+        public async Task<IActionResult> Add(Guid id)
         {
-            var product = productsRepository.TryGetById(id);
+            var product = await productsRepository.TryGetByIdAsync(id);
             if (product == null)
             {
                 return RedirectToAction("Error", "Home");

@@ -6,6 +6,7 @@ using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -20,15 +21,15 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
             this.productsRepository = productsRepository;
         }
 
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = productsRepository.GetAll();
+            var products = await productsRepository.GetAllAsync();
             return View(Mapping.ToProductViewModels(products));
         }
 
-        public ActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            productsRepository.Delete(id);
+            await productsRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
@@ -38,7 +39,7 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(ProductVM product)
+        public async Task<IActionResult> Add(ProductVM product)
         {
             if (ModelState.IsValid)
             {
@@ -49,15 +50,15 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
                     Description = product.Description,
                     Image = @"/images/paints/images.jpg"
                 };
-                productsRepository.Add(productDb);
+                await productsRepository.AddAsync(productDb);
                 return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
 
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            var productDb = productsRepository.TryGetById(id);
+            var productDb = await productsRepository.TryGetByIdAsync(id);
             if (productDb == null)
             {
                 return NotFound();
@@ -76,17 +77,17 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(ProductVM productVM)
+        public async Task<IActionResult> Edit(ProductVM productVM)
         {
             if (ModelState.IsValid)
             {
-                var product = productsRepository.TryGetById(productVM.Id);
+                var product = await productsRepository.TryGetByIdAsync(productVM.Id);
                 product.Name = productVM.Name;
                 product.Cost = productVM.Cost;
                 product.Description = productVM.Description;
                 product.Image = productVM.Image;
 
-                productsRepository.Edit(product);
+                await productsRepository.EditAsync(product);
                 return RedirectToAction(nameof(Index));
             }
             return View(productVM);
