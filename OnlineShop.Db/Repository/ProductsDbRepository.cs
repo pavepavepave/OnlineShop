@@ -1,8 +1,10 @@
-﻿using OnlineShop.Db.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Db.Repository
 {
@@ -15,36 +17,36 @@ namespace OnlineShop.Db.Repository
             this.databaseContext = databaseContext;
         }
 
-        public List<Product> GetAll()
+        public async Task<List<Product>> GetAllAsync()
         {
-            return databaseContext.Products.ToList();
+            return await databaseContext.Products.ToListAsync();
         }
 
-        public Product TryGetById(Guid id)
+        public async Task<Product> TryGetByIdAsync(Guid id)
         {
-            return databaseContext.Products.FirstOrDefault(product => product.Id == id);
+            return await databaseContext.Products.FirstOrDefaultAsync(product => product.Id == id);
         }
 
-        public void Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            var product = TryGetById(id);
+            var product = await TryGetByIdAsync(id);
             if (product == null)
             {
                 return;
             }
             databaseContext.Products.Remove(product);
-            databaseContext.SaveChanges();
+            await databaseContext.SaveChangesAsync();
         }
 
-        public void Add(Product product)
+        public async Task AddAsync(Product product)
         {
             databaseContext.Products.Add(product);
-            databaseContext.SaveChanges();
+            await databaseContext.SaveChangesAsync();
         }
 
-        public void Edit(Product product)
+        public async Task EditAsync(Product product)
         {
-            var existingProduct = TryGetById(product.Id);
+            var existingProduct = await TryGetByIdAsync(product.Id);
             if (existingProduct == null)
             {
                 return;
@@ -52,7 +54,7 @@ namespace OnlineShop.Db.Repository
             existingProduct.Name = product.Name;
             existingProduct.Cost = product.Cost;
             existingProduct.Description = product.Description;
-            databaseContext.SaveChanges();
+            await databaseContext.SaveChangesAsync();
         }
     }
 }

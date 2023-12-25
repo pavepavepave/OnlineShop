@@ -2,6 +2,7 @@
 using OnlineShop.Db.Interfaces;
 using OnlineShopWebApp.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -14,9 +15,9 @@ namespace OnlineShopWebApp.Controllers
             this.productsRepository = productsRepository;
         }
 
-        public IActionResult Index(Guid id)
+        public async Task<IActionResult> Index(Guid id)
         {
-            var product = productsRepository.TryGetById(id);
+            var product = await productsRepository.TryGetByIdAsync(id);
             return View(Mapping.ToProductViewModel(product));
         }
     }
