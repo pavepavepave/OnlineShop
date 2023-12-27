@@ -3,6 +3,7 @@ using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Db.Repository
 {
@@ -11,37 +12,37 @@ namespace OnlineShop.Db.Repository
     /// </summary>
     public class OrdersDbRepository : IOrdersRepository
     {
-        private readonly DatabaseContext databaseContext;
+        private readonly DatabaseContext _databaseContext;
 
         public OrdersDbRepository(DatabaseContext databaseContext)
         {
-            this.databaseContext = databaseContext;
+            this._databaseContext = databaseContext;
         }
 
-        public List<Order> GetAll()
+        public async Task<List<Order>> GetAllAsync()
         {
-            return databaseContext.Orders.Include(x => x.Items).ThenInclude(x => x.Product).ToList();
+            return await _databaseContext.Orders.Include(x => x.Items).ThenInclude(x => x.Product).ToListAsync();
         }
 
-        public Order GetByOrderId(int id)
+        public async Task<Order> GetByOrderIdAsync(int id)
         {
-            return databaseContext.Orders.Include(x => x.Items).ThenInclude(x => x.Product).FirstOrDefault(x => x.Id == id);
+            return await _databaseContext.Orders.Include(x => x.Items).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void Create(Order order)
+        public async Task CreateAsync(Order order)
         {
-            databaseContext.Orders.Add(order);
-            databaseContext.SaveChanges();
+            await _databaseContext.Orders.AddAsync(order);
+            await _databaseContext.SaveChangesAsync();
         }
 
-        public void Edit(int orderId, int status)
+        public async Task EditAsync(int orderId, int status)
         {
-            var order = GetByOrderId(orderId);
+            var order = await GetByOrderIdAsync(orderId);
             if (order != null)
             {
                 order.Status = (OrderStatus)status;
             }
-            databaseContext.SaveChanges();
+            await _databaseContext.SaveChangesAsync();
         }
     }
 }
