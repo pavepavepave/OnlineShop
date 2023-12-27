@@ -4,6 +4,7 @@ using OnlineShop.Db;
 using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using OnlineShopWebApp.Helpers;
+using System.Threading.Tasks;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -11,29 +12,29 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     [Authorize(Roles = Constants.AdminRoleName)]
     public class OrderController : Controller
     {
-        private readonly IOrdersRepository ordersRepository;
+        private readonly IOrdersRepository _ordersRepository;
 
         public OrderController(IOrdersRepository ordersRepository)
         {
-            this.ordersRepository = ordersRepository;
+            _ordersRepository = ordersRepository;
         }
 
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var ordersList = ordersRepository.GetAll();
+            var ordersList = await _ordersRepository.GetAllAsync();
             return View(Mapping.ToOrderViewModels(ordersList));
         }
 
-        public ActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var order = ordersRepository.GetByOrderId(id);
+            var order = await _ordersRepository.GetByOrderIdAsync(id);
             return View(Mapping.ToOrderViewModel(order));
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, OrderStatusVM status)
+        public async Task<IActionResult> Edit(int id, OrderStatusVM status)
         {
-            ordersRepository.Edit(id, (int)status);
+            await _ordersRepository.EditAsync(id, (int)status);
             return RedirectToAction(nameof(Index));
         }
     }

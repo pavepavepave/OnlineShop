@@ -1,13 +1,14 @@
 ﻿using OnlineShop.Db.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Db.Interfaces
 {
     public interface IOrdersRepository
     {
-        List<Order> GetAll();
-        Order GetByOrderId(int id);
-        void Create(Order order);
-        void Edit(int id, int status);
+        Task<List<Order>> GetAllAsync();
+        Task<Order> GetByOrderIdAsync(int id);
+        Task CreateAsync(Order order);
+        Task EditAsync(int id, int status);
     }
 }
