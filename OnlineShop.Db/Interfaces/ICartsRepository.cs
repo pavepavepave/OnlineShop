@@ -1,14 +1,15 @@
 ﻿using OnlineShop.Db.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace OnlineShop.Db.Interfaces
 {
     public interface ICartsRepository
     {
-        Cart TryGetByUserId(string userId);
-        void Add(Product product, string userId);
-        void Clear(string userId);
-        void ReduceAmount(Guid productId, string userId);
-        void IncreaseAmount(Guid productId, string userId);
+        Task<Cart> TryGetByUserIdAsync(string userId);
+        Task AddAsync(Product product, string userId);
+        Task ClearAsync(string userId);
+        Task ReduceAmountAsync(Guid productId, string userId);
+        Task IncreaseAmountAsync(Guid productId, string userId);
     }
 }

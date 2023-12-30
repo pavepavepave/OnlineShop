@@ -2,6 +2,7 @@
 using OnlineShop.Db;
 using OnlineShop.Db.Interfaces;
 using OnlineShopWebApp.Helpers;
+using System.Threading.Tasks;
 
 namespace OnlineShopWebApp.Views.Shared.Components.Cart
 {
@@ -14,12 +15,12 @@ namespace OnlineShopWebApp.Views.Shared.Components.Cart
             this.cartsRepository = cartsRepository;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var cart = cartsRepository.TryGetByUserId(Constants.UserId);
+            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
             var cartVM = Mapping.ToCartViewModel(cart);
             var productCounts = cartVM?.Amount ?? 0;
-            return View("Cart", productCounts); //возвращаем частичное представление Cart, в которое передали значение productCounts
+            return View("Cart", productCounts);
         }
     }
 }

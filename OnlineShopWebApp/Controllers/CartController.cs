@@ -20,9 +20,9 @@ namespace OnlineShopWebApp.Controllers
             this.productsRepository = productsRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var cart = cartsRepository.TryGetByUserId(Constants.UserId);
+            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
             if (cart == null)
             {
                 return RedirectToAction("Error", "Home");
@@ -37,25 +37,25 @@ namespace OnlineShopWebApp.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-            cartsRepository.Add(product, Constants.UserId);
+            await cartsRepository.AddAsync(product, Constants.UserId);
             return RedirectToAction("Index");
         }
 
-        public IActionResult Clear()
+        public async Task<IActionResult> Clear()
         {
-            cartsRepository.Clear(Constants.UserId);
+            await cartsRepository.ClearAsync(Constants.UserId);
             return RedirectToAction("Index");
         }
 
-        public IActionResult ReduceAmount(Guid id)
+        public async Task<IActionResult> ReduceAmount(Guid id)
         {
-            cartsRepository.ReduceAmount(id, Constants.UserId);
+            await cartsRepository.ReduceAmountAsync(id, Constants.UserId);
             return RedirectToAction("Index");
         }
 
-        public IActionResult IncreaseAmount(Guid id)
+        public async Task<IActionResult> IncreaseAmount(Guid id)
         {
-            cartsRepository.IncreaseAmount(id, Constants.UserId);
+            await cartsRepository.IncreaseAmountAsync(id, Constants.UserId);
             return RedirectToAction("Index");
         }
     }
