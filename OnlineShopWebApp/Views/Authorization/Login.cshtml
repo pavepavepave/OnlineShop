@@ -7,11 +7,14 @@
         <div>
             <div>
                 <input class="input-field" placeholder="Логин" asp-for="UserName" />
-                <span asp-validation-for="UserName" />
+                <span asp-validation-for="UserName"></span>
             </div>
             <div>
-                <input class="input-field" type="password" placeholder="Пароль" asp-for="Password" />
-                <span asp-validation-for="Password" />
+                <div class="input-field-wrapper">
+                    <input id="password-input" class="input-field password" type="password" placeholder="Пароль" asp-for="Password" />
+                    <a href="#" class="password-control" onclick="show_hide_password(this);"></a>
+                </div>
+                <span asp-validation-for="Password"></span>
             </div>
         </div>
         <div>
@@ -31,3 +34,17 @@
         </div>
     </div>
 </form>
+
+<script>
+    function show_hide_password(target){
+    	var input = document.getElementById('password-input');
+    	if (input.getAttribute('type') == 'password') {
+    		target.classList.add('view');
+    		input.setAttribute('type', 'text');
+    	} else {
+    		target.classList.remove('view');
+    		input.setAttribute('type', 'password');
+    	}
+    	return false;
+    }
+</script>

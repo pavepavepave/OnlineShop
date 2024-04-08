@@ -84,6 +84,31 @@ body {
     border-radius: 0.25rem;
 }
 
+.input-field.password {
+    width: 100%;
+    margin: 0;
+}
+
+.input-field-wrapper {
+    position: relative;
+    width: 400px;
+    margin: 10px auto 10px auto;
+}
+
+.password-control {
+    position: absolute;
+    top: 11px;
+    right: 10px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: url(../images/viewPassword/view.svg) 0 0 no-repeat;
+}
+
+.password-control.view {
+    background: url(../images/viewPassword/no-view.svg) 0 0 no-repeat;
+}
+
 .button-container {
     display: flex;
     justify-content: space-between;
