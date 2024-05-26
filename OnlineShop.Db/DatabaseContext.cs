@@ -19,8 +19,6 @@ namespace OnlineShop.Db
         
         public DbSet<FavoriteProduct> Favorites { get; set; }
         
-        public DbSet<CompareProduct> Compares { get; set; }
-        
         public DbSet<Order> Orders { get; set; }
         
         public DbSet<Image> Images { get; set; }

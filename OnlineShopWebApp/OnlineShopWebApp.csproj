@@ -48,4 +48,9 @@
 	  </EmbeddedResource>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Views\Compare\Index.cshtml" />
+	  <_ContentIncludedByDefault Remove="Views\Shared\Components\Compare\Compare.cshtml" />
+	</ItemGroup>
+
 </Project>
