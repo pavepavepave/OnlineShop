@@ -3,8 +3,8 @@ using OnlineShop.Db.Interfaces;
 using OnlineShop.Db.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace OnlineShop.Db.Repository
 {
@@ -19,12 +19,13 @@ namespace OnlineShop.Db.Repository
 
         public async Task<List<Product>> GetAllAsync()
         {
-            return await databaseContext.Products.ToListAsync();
+            return await databaseContext.Products.Include(x=>x.Images).ToListAsync();
         }
 
         public async Task<Product> TryGetByIdAsync(Guid id)
         {
-            return await databaseContext.Products.FirstOrDefaultAsync(product => product.Id == id);
+            return await databaseContext.Products.Include(x => x.Images)
+                              .FirstOrDefaultAsync(product => product.Id == id);
         }
 
         public async Task DeleteAsync(Guid id)
@@ -44,16 +45,27 @@ namespace OnlineShop.Db.Repository
             await databaseContext.SaveChangesAsync();
         }
 
-        public async Task EditAsync(Product product)
+        public async Task EditAsync(Product product, IFormFile[] uploadedFiles)
         {
-            var existingProduct = await TryGetByIdAsync(product.Id);
-            if (existingProduct == null)
+            var currentProduct = await TryGetByIdAsync(product.Id);
+            currentProduct.Name = product.Name;
+            currentProduct.Cost = product.Cost;
+            currentProduct.Description = product.Description;
+    
+            if(uploadedFiles != null)
             {
-                return;
-            }
-            existingProduct.Name = product.Name;
-            existingProduct.Cost = product.Cost;
-            existingProduct.Description = product.Description;
+                foreach (var image in currentProduct.Images)
+                {
+                    databaseContext.Images.Remove(image);
+                }
+
+                foreach (var image in product.Images)
+                {
+                    image.ProductId = product.Id;
+                    databaseContext.Images.Add(image);
+                }
+            }          
+
             await databaseContext.SaveChangesAsync();
         }
     }

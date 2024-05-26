@@ -3,25 +3,74 @@ using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 
 namespace OnlineShopWebApp.Helpers
 {
     public static class Mapping
     {
-        public static ProductVM ToProductViewModel(Product product)
+        public static ProductVM ToProductVM(this Product product)
         {
+            var productVMImagePath = product.Images.Select(x => x.Url).ToList();
+            
             return new ProductVM
             {
                 Id = product.Id,
                 Name = product.Name,
                 Cost = product.Cost,
                 Description = product.Description,
-                Image = product.Image
+                ImagePath = productVMImagePath 
             };
         }
-        public static List<ProductVM> ToProductViewModels(List<Product> products)
+
+        public static List<ProductVM> ToProductsVM(List<Product> products)
         {
-            return products.Select(x => ToProductViewModel(x)).ToList();
+            return products.Select(x => ToProductVM(x)).ToList();
+        }
+        
+        public static Product ToProduct(this AddProductVM addProductVM, List<string> imagesPaths)
+        {
+            return new Product
+            {
+                Name = addProductVM.Name,
+                Cost = addProductVM.Cost,
+                Description = addProductVM.Description,
+                Images = ToImages(imagesPaths)
+            };
+        }    
+        
+        public static EditProductVM ToEditProductVM(this Product product)
+        {
+            return new EditProductVM
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Cost = product.Cost,
+                Description = product.Description,
+                ImagePath = product.Images.ToPaths()
+            };
+        }
+
+        public static Product ToProduct(this EditProductVM editProductVM)
+        {
+            return new Product
+            {
+                Id = editProductVM.Id,
+                Name = editProductVM.Name,
+                Cost = editProductVM.Cost,
+                Description = editProductVM.Description,
+                Images = editProductVM.ImagePath.ToImages()
+            };
+        }    
+        
+        private static List<Image> ToImages(this List<string> paths)
+        {
+            return paths.Select(x => new Image { Url = x }).ToList();
+        }        
+        
+        private static List<string> ToPaths (this List<Image> paths)
+        {
+            return paths.Select(x => x.Url ).ToList();
         }
 
         public static CartVM ToCartViewModel(Cart cart)
@@ -45,7 +94,7 @@ namespace OnlineShopWebApp.Helpers
                 {
                     Id = x.Id,
                     Amount = x.Amount,
-                    Product = ToProductViewModel(x.Product)
+                    Product = ToProductVM(x.Product)
                 })
                 .ToList();
         }

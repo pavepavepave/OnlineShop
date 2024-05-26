@@ -18,7 +18,7 @@ namespace OnlineShopWebApp.Controllers
         public async Task<IActionResult> Index(Guid id)
         {
             var product = await productsRepository.TryGetByIdAsync(id);
-            return View(Mapping.ToProductViewModel(product));
+            return View(Mapping.ToProductVM(product));
         }
     }
 }

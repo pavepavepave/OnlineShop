@@ -15,6 +15,8 @@ using OnlineShop.Db.Repository;
 using Serilog;
 using System;
 using System.Globalization;
+using OnlineShopWebApp.Helpers;
+using OnlineShopWebApp.Helpers.Interfaces;
 
 namespace OnlineShopWebApp
 {
@@ -59,6 +61,7 @@ namespace OnlineShopWebApp
             services.AddTransient<IFavoritesRepository, FavoritesDbRepository>();
             services.AddTransient<ICompareRepository, CompareDbRepository>();
             services.AddTransient<IOrdersRepository, OrdersDbRepository>();
+            services.AddTransient<IImagesProvider, ImagesProvider>();
 
             services.AddControllersWithViews()
                 .AddViewLocalization();

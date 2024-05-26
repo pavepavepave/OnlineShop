@@ -6,7 +6,10 @@ using OnlineShop.Db.Models;
 using OnlineShopWebApp.Areas.Admin.Models;
 using OnlineShopWebApp.Helpers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using OnlineShopWebApp.Helpers.Interfaces;
 
 namespace OnlineShopWebApp.Areas.Admin.Controllers
 {
@@ -15,16 +18,18 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IProductsRepository productsRepository;
+        private readonly IImagesProvider _imagesProvider;
 
-        public ProductController(IProductsRepository productsRepository)
+        public ProductController(IProductsRepository productsRepository, IImagesProvider imagesProvider)
         {
             this.productsRepository = productsRepository;
+            _imagesProvider = imagesProvider;
         }
 
         public async Task<IActionResult> Index()
         {
             var products = await productsRepository.GetAllAsync();
-            return View(Mapping.ToProductViewModels(products));
+            return View(Mapping.ToProductsVM(products));
         }
 
         public async Task<IActionResult> Delete(Guid id)
@@ -39,58 +44,48 @@ namespace OnlineShopWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(ProductVM product)
+        public async Task<IActionResult> Add(AddProductVM product)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(product);
+
+            List<string> imagesPaths;
+            if (product.UploadedFiles == null || product.UploadedFiles.Length == 0)
             {
-                var productDb = new Product
-                {
-                    Name = product.Name,
-                    Cost = product.Cost,
-                    Description = product.Description,
-                    Image = @"/images/paints/images.jpg"
-                };
-                await productsRepository.AddAsync(productDb);
-                return RedirectToAction(nameof(Index));
+                imagesPaths = new List<string> { "/images/goods/defaultImage.jpg" };
             }
-            return View(product);
+            else
+            {
+                imagesPaths = await _imagesProvider.SafeFiles(product.UploadedFiles.ToArray(), ImageFolders.Goods);
+            }
+
+            await productsRepository.AddAsync(product.ToProduct(imagesPaths));
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var productDb = await productsRepository.TryGetByIdAsync(id);
-            if (productDb == null)
+            var product = await productsRepository.TryGetByIdAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            var productVM = new ProductVM
-            {
-                Id = productDb.Id,
-                Name = productDb.Name,
-                Cost = productDb.Cost,
-                Description = productDb.Description,
-                Image = productDb.Image
-            };
-
-            return View(productVM);
+            return View(product.ToEditProductVM());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(ProductVM productVM)
+        public async Task<IActionResult> Edit(EditProductVM product)
         {
             if (ModelState.IsValid)
             {
-                var product = await productsRepository.TryGetByIdAsync(productVM.Id);
-                product.Name = productVM.Name;
-                product.Cost = productVM.Cost;
-                product.Description = productVM.Description;
-                product.Image = productVM.Image;
-
-                await productsRepository.EditAsync(product);
+                var addedImagesPaths = await _imagesProvider.SafeFiles(product.UploadedFiles, ImageFolders.Goods);
+                product.ImagePath = addedImagesPaths;
+                
+                await productsRepository.EditAsync(product.ToProduct(), product.UploadedFiles);
+                
                 return RedirectToAction(nameof(Index));
             }
-            return View(productVM);
+            return View(product);
         }
     }
 }

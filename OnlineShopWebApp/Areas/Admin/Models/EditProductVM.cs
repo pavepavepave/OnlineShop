@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
 namespace OnlineShopWebApp.Areas.Admin.Models
 {
-    public class ProductVM
+    public class EditProductVM
     {
         public Guid Id { get; set; }
         
@@ -21,9 +21,9 @@ namespace OnlineShopWebApp.Areas.Admin.Models
         [Required(ErrorMessage = "Не указано описание товара")]
         [StringLength(250, MinimumLength = 10, ErrorMessage = "Описание должно содержать от 10 до 250 символов")]
         public string Description { get; set; }
-
+        
         public List<string> ImagePath { get; set; }
-
-        public IFormFile[] UploadedFiles { get ; set; }
+        
+        public IFormFile[] UploadedFiles { get; set; }
     }
 }

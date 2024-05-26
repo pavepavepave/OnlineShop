@@ -22,7 +22,7 @@ namespace OnlineShopWebApp.Controllers
         public IActionResult Index()
         {
             var products = compareRepository.GetAll(Constants.UserId);
-            return View(Mapping.ToProductViewModels(products));
+            return View(Mapping.ToProductsVM(products));
         }
 
         public IActionResult Add(Guid id)

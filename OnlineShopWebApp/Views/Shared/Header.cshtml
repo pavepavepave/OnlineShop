@@ -32,9 +32,12 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item text-dark">
-                            <a class="nav-link text-dark" href="#">@User.Identity.Name</a>
+                            <a id="navBarDropdownMenu" class="nav-link text-dark">
+                                @User.Identity.Name
+                            </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="dropdown-item" aria-labelledby="navBarDropdownMenu">
+                            @* <a class="nav-link text-dark" asp-area="" asp-controller="Authorization" asp-action="Index">Личные данные</a> TODO *@ 
                             <a class="nav-link text-dark" asp-area="" asp-controller="Authorization" asp-action="Logout">Выйти</a>
                         </li>
                     }

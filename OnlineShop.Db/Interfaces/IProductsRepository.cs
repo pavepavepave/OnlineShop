@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace OnlineShop.Db.Interfaces
 {
@@ -11,6 +12,6 @@ namespace OnlineShop.Db.Interfaces
         Task<Product> TryGetByIdAsync(Guid id);
         Task DeleteAsync(Guid id);
         Task AddAsync(Product product);
-        Task EditAsync(Product product);
+        Task EditAsync(Product product, IFormFile[] uploadedFiles);
     }
 }

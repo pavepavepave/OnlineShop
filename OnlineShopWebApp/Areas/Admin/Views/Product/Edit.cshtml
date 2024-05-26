@@ -1,6 +1,6 @@
-﻿@model ProductVM
+﻿@model EditProductVM
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div>
         <div>
             <h3 class="text-center">Список товаров</h3>
@@ -61,13 +61,25 @@
                     <br />
                     <div>
                         <div class="input-group">
+                            <input type="hidden" asp-for="ImagePath" value="@Model.ImagePath"/>
                             <div class="input-group-prepend">
-                                <span class="input-group-text">Картинка:</span>
+                                <span class="input-group-text">Изображения:</span>
                             </div>
-                            <input class="form-control" maxlength="250" asp-for="Image" value="@Model.Image" readonly/>
+                            @foreach (var imagePath in Model.ImagePath)
+                            {
+                                <div>
+                                    <img src="@imagePath" width="250" height="150"/>
+                                </div>
+                            }
                         </div>
-                        <div>
-                            <span asp-validation-for="Image" />
+                        <div class="form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Загрузить изображения:</span>
+                            </div>
+                            <input type="file" name="UploadedFiles" multiple accept="image/*" class="form-control"/>
+                            <div>
+                                <span asp-validation-for="UploadedFiles"></span>
+                            </div>
                         </div>
                     </div>
                     <br />
