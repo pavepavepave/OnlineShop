@@ -17,8 +17,6 @@ namespace OnlineShop.Db
         
         public DbSet<CartItem> CartItems { get; set; }
         
-        public DbSet<FavoriteProduct> Favorites { get; set; }
-        
         public DbSet<Order> Orders { get; set; }
         
         public DbSet<Image> Images { get; set; }

@@ -51,6 +51,8 @@
 	<ItemGroup>
 	  <_ContentIncludedByDefault Remove="Views\Compare\Index.cshtml" />
 	  <_ContentIncludedByDefault Remove="Views\Shared\Components\Compare\Compare.cshtml" />
+	  <_ContentIncludedByDefault Remove="Views\Favorites\Index.cshtml" />
+	  <_ContentIncludedByDefault Remove="Views\Shared\Components\Fovarites\Fovarites.cshtml" />
 	</ItemGroup>
 
 </Project>
