@@ -62,6 +62,7 @@ namespace OnlineShopWebApp
             services.AddTransient<IImagesProvider, ImagesProvider>();
 
             services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation()
                 .AddViewLocalization();
             services.AddLocalization(options => options.ResourcesPath = "Resources"); //Локализация
             services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
