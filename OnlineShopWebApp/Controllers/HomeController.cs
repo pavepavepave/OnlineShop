@@ -7,17 +7,9 @@ namespace OnlineShopWebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IProductsRepository productsRepository;
-
-        public HomeController(IProductsRepository productsRepository)
+        public IActionResult Index()
         {
-            this.productsRepository = productsRepository;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var products = await productsRepository.GetAllAsync();
-            return View(Mapping.ToProductsVM(products));
+            return View();
         }
 
         public IActionResult Error()
