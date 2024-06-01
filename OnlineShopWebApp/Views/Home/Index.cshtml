@@ -1,5 +1,86 @@
-﻿@model List<ProductVM>
+﻿@{
+ViewData["Title"] = "Главная страница";
+}
 
-<div class="text-center">
-    <h2 class="display-4">Интернет портал художника</h2>
+<div class="header" style="text-align: center;">
+    <h1>Создавай искусство с душой и вдохновением</h1>
+    <div style="text-align: center;">
+        <img src="images/filling/mainPage.jpg" alt="" style="width: 650px; height: auto;"/>
+    </div>
 </div>
+
+<div class="content" style="text-align: center; margin-top: 15px">
+    <p>Я профессиональный художник с многолетним опытом создания уникальных картин на заказ.</p>
+    <p>Моё творчество вдохновлено природой, эмоциями и красотой мира вокруг нас.</p>
+    <p>Моя цель - не только создавать произведения искусства, которые будут вдохновлять и радовать вас каждый день,
+        но и приобщать к этому других людей, помогая им раскрыть свои творческие способности и находить радость в искусстве.</p>
+    <a asp-controller="About" asp-action="Index">[Подробнее обо мне]</a>
+</div>
+<div class="testimonials-container">
+    <div class="testimonial">
+        <div class="testimonial-text">
+            <h3>Павел</h3>
+            <p>Спасибо за потрясающую картину! Она стала центральным элементом нашего дома.</p>
+        </div>
+        <img src="images/filling/review-1.png" alt="Отзыв 1">
+    </div>
+    <div class="testimonial">
+        <div class="testimonial-text">
+            <h3>Игорь</h3>
+            <p>Провели отличный мастер-класс. Первый раз держал тафтинговый пистолет в руках.</p>
+        </div>
+        <img src="images/filling/review-2.png" alt="Отзыв 2">
+    </div>
+    <div class="testimonial">
+        <div class="testimonial-text">
+            <h3>Анна</h3>
+            <p>Ура! Сбылась моя мечта! Я написала свою первую картину с волшебным сюжетом.</p>
+        </div>
+        <img src="images/filling/review-3.png" alt="Отзыв 3">
+    </div>
+</div>
+
+<style>
+    .content {
+        width: 650px;
+        margin: 0 auto;
+        text-align: justify;
+    }
+    
+    .testimonials-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 0;
+        margin: 0 auto;
+        width: 80%;
+    }
+    .testimonial {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        box-sizing: border-box;
+        width: 30%; 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .testimonial img {
+        width: 80%; /* Примерный размер изображения */
+        height: auto;
+        margin-bottom: 10px;
+    }
+    .testimonial-text {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    .testimonial-text h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .testimonial-text p {
+        margin: 5px 0 0;
+        font-size: 14px;
+    }
+</style>
