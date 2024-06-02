@@ -34,12 +34,12 @@ namespace OnlineShopWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(OrderVM orderVM)
         {
-            var existingCart = await _cartRepository.TryGetByUserIdAsync(Constants.UserId);
+            var existingCart = await _cartRepository.TryGetByUserIdAsync(User.Identity.Name);
             if (ModelState.IsValid)
             {
-                var order = Mapping.ToOrder(orderVM, existingCart, Constants.UserId);
+                var order = Mapping.ToOrder(orderVM, existingCart, User.Identity.Name);
                 await _ordersRepository.CreateAsync(order);
-                await _cartRepository.ClearAsync(Constants.UserId);
+                await _cartRepository.ClearAsync(User.Identity.Name);
                 return View("Detail", Mapping.ToOrderViewModel(order));
             };
             return View(orderVM);

@@ -17,7 +17,7 @@ namespace OnlineShopWebApp.Views.Shared.Components.Cart
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
+            var cart = await cartsRepository.TryGetByUserIdAsync(User.Identity.Name);
             var cartVM = Mapping.ToCartViewModel(cart);
             var productCounts = cartVM?.Amount ?? 0;
             return View("Cart", productCounts);

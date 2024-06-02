@@ -22,7 +22,7 @@ namespace OnlineShopWebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var cart = await cartsRepository.TryGetByUserIdAsync(Constants.UserId);
+            var cart = await cartsRepository.TryGetByUserIdAsync(User.Identity.Name);
             if (cart == null)
             {
                 return RedirectToAction("Error", "Home");
@@ -37,25 +37,25 @@ namespace OnlineShopWebApp.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-            await cartsRepository.AddAsync(product, Constants.UserId);
+            await cartsRepository.AddAsync(product, User.Identity.Name);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Clear()
         {
-            await cartsRepository.ClearAsync(Constants.UserId);
+            await cartsRepository.ClearAsync(User.Identity.Name);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ReduceAmount(Guid id)
         {
-            await cartsRepository.ReduceAmountAsync(id, Constants.UserId);
+            await cartsRepository.ReduceAmountAsync(id, User.Identity.Name);
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> IncreaseAmount(Guid id)
         {
-            await cartsRepository.IncreaseAmountAsync(id, Constants.UserId);
+            await cartsRepository.IncreaseAmountAsync(id, User.Identity.Name);
             return RedirectToAction("Index");
         }
     }
