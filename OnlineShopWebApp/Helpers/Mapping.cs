@@ -184,5 +184,66 @@ namespace OnlineShopWebApp.Helpers
                 UserName = user.UserName
             };
         }
+        
+        public static PaintingVM ToPaintingVM(this Painting painting)
+        {
+            var paintingVMImagePath = painting.Images.Select(x => x.Url).ToList();
+            
+            return new PaintingVM
+            {
+                Id = painting.Id,
+                Name = painting.Name,
+                Description = painting.Description,
+                ImagePath = paintingVMImagePath 
+            };
+        }
+
+        public static List<PaintingVM> ToPaintingsVM(List<Painting> paintings)
+        {
+            return paintings.Select(x => ToPaintingVM(x)).ToList();
+        }
+        
+        public static Painting ToPainting(this AddPaintingVM addPaintingVM, List<string> imagesPaths)
+        {
+            return new Painting
+            {
+                Name = addPaintingVM.Name,
+                Description = addPaintingVM.Description,
+                Images = ToImagesPainting(imagesPaths)
+            };
+        }    
+        
+        public static EditPaintingVM ToEditPaintingVM(this Painting product)
+        {
+            return new EditPaintingVM
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                ImagePath = product.Images.ToPaths()
+            };
+        }
+
+        public static Painting ToPainting(this EditPaintingVM editPaintingVM)
+        {
+            return new Painting
+            {
+                Id = editPaintingVM.Id,
+                Name = editPaintingVM.Name,
+                Description = editPaintingVM.Description,
+                Images = editPaintingVM.ImagePath.ToImagesPainting()
+            };
+        }
+        
+        private static List<ImagePainting> ToImagesPainting(this List<string> paths)
+        {
+            return paths.Select(x => new ImagePainting { Url = x }).ToList();
+        }        
+        
+        private static List<string> ToPaths (this List<ImagePainting> paths)
+        {
+            return paths.Select(x => x.Url ).ToList();
+        }
+
     }
 }

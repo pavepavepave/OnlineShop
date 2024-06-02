@@ -1,0 +1,60 @@
+﻿@model ProductVM
+
+<form method="post">
+    <div>
+        <div>
+            <h3 class="text-center">Список картинк</h3>
+        </div>
+        <div class="row">
+            <div class="border">
+                @await Html.PartialAsync("AdminPanel")
+            </div>
+            <div class="col-9">
+                <div class="col-8">
+                    <div>
+                        <h4>Добавление новой картины:</h4>
+                    </div>
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Название:</span>
+                            </div>
+                            <input class="form-control" maxlength="100" asp-for="Name" required/>
+                        </div>
+                        <div>
+                            <span asp-validation-for="Name" />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Цена:</span>
+                            </div>
+                            <input class="form-control" maxlength="7" asp-for="Cost" />
+                        </div>
+                        <div>
+                            <span asp-validation-for="Cost" />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Описание:</span>
+                            </div>
+                            <input class="form-control" maxlength="250" asp-for="Description" />
+                        </div>
+                        <div>
+                            <span asp-validation-for="Description" />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <button class="btn btn-success" asp-area="Admin" asp-controller="Painting" asp-action="Add" type="submit">Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -57,6 +57,7 @@ namespace OnlineShopWebApp
             });
 
             services.AddTransient<IProductsRepository, ProductsDbRepository>();
+            services.AddTransient<IPaintingsRepository, PaintingsDbRepository>();
             services.AddTransient<ICartsRepository, CartsDbRepository>();
             services.AddTransient<IOrdersRepository, OrdersDbRepository>();
             services.AddTransient<IImagesProvider, ImagesProvider>();

@@ -1,0 +1,82 @@
+﻿@model EditPaintingVM
+
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <div>
+            <h3 class="text-center">Список картин</h3>
+        </div>
+        <div class="row">
+            <div class="border">
+                @await Html.PartialAsync("AdminPanel")
+            </div>
+            <div class="col-9 border">
+                <div>
+                    <div>
+                        <h4>Изменить картину:</h4>
+                    </div>
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Id:</span>
+                            </div>
+                            <input class="form-control" asp-for="Id" value="@Model.Id" readonly />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Название:</span>
+                            </div>
+                            <input class="form-control" maxlength="100" asp-for="Name" value="@Model.Name" />
+                        </div>
+                        <div>
+                            <span asp-validation-for="Name" />
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Описание:</span>
+                            </div>
+                            <input class="form-control" maxlength="250" asp-for="Description" value="@Model.Description" />
+                        </div>
+                        <div>
+                            <span asp-validation-for="Description" />
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <div class="input-group">
+                            <input type="hidden" asp-for="ImagePath" value="@Model.ImagePath"/>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Изображения:</span>
+                            </div>
+                            @foreach (var imagePath in Model.ImagePath)
+                            {
+                                <div>
+                                    <img src="@imagePath" width="250" height="150"/>
+                                </div>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Загрузить изображения:</span>
+                            </div>
+                            <input type="file" name="UploadedFiles" multiple accept="image/*" class="form-control"/>
+                            <div>
+                                <span asp-validation-for="UploadedFiles"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <button class="btn btn-success" asp-area="Admin" asp-controller="Painting" asp-action="Edit" type="submit">Изменить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

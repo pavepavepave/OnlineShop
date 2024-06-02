@@ -12,21 +12,25 @@ namespace OnlineShop.Db
         }
 
         public DbSet<Product> Products { get; set; }
-        
+
+        public DbSet<Painting> Paintings { get; set; }
+
         public DbSet<Cart> Carts { get; set; }
-        
+
         public DbSet<CartItem> CartItems { get; set; }
-        
+
         public DbSet<Order> Orders { get; set; }
-        
+
         public DbSet<Image> Images { get; set; }
+
+        public DbSet<ImagePainting> ImagesPaintings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Product>()
-                 .Property(p => p.Cost)
-                 .HasColumnType("decimal(18,2)");
+                .Property(p => p.Cost)
+                .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Image>().HasOne(p => p.Product).WithMany(p => p.Images)
                 .HasForeignKey(p => p.ProductId).OnDelete(DeleteBehavior.Cascade);
@@ -76,7 +80,7 @@ namespace OnlineShop.Db
             };
 
             modelBuilder.Entity<Image>().HasData(image1, image2, image3, image4, image5, image6);
-            
+
             modelBuilder.Entity<Product>()
                 .HasData(
                     new Product
@@ -121,6 +125,99 @@ namespace OnlineShop.Db
                         Cost = 910,
                         Description = "Набор меловой пастели 48 цв."
                     });
+
+            #region PicturesForPortfolio
+
+            modelBuilder.Entity<ImagePainting>().HasOne(p => p.Painting).WithMany(p => p.Images)
+                .HasForeignKey(p => p.PaintingId).OnDelete(DeleteBehavior.Cascade);
+
+            var paintingId1 = Guid.Parse("01e5de59-7e9d-4985-9fb9-84e67fbbbdfe");
+            var paintingId2 = Guid.Parse("dc00811d-5c83-4bff-ab04-e10f56dc4faf");
+            var paintingId3 = Guid.Parse("2bee2bc7-3a2b-49ed-a608-c24d2d3eecec");
+            var paintingId4 = Guid.Parse("158cbcb3-cd2b-4a27-bafd-e1c026e97dc0");
+            var paintingId5 = Guid.Parse("fb352635-60db-40cf-8f87-6a94a1355e49");
+            var paintingId6 = Guid.Parse("2d6334d7-8965-450e-8c37-741031080e31");
+
+            var imagePainting1 = new ImagePainting
+            {
+                Id = Guid.Parse("26a8e059-69bc-47ac-93fd-7f75715d8f82"),
+                Url = "/images/paintings/image1.jpg",
+                PaintingId = paintingId1
+            };
+            var imagePainting2 = new ImagePainting
+            {
+                Id = Guid.Parse("8e913665-4107-40c2-bc31-be6bc537d14d"),
+                Url = "/images/paintings/image2.jpg",
+                PaintingId = paintingId2
+            };
+            var imagePainting3 = new ImagePainting
+            {
+                Id = Guid.Parse("2fcbeb71-e0bd-49dd-9643-5b7c6b07b993"),
+                Url = "/images/paintings/image3.jpg",
+                PaintingId = paintingId3
+            };
+            var imagePainting4 = new ImagePainting
+            {
+                Id = Guid.Parse("bb9e2489-d497-4113-8fd3-1d9398524d04"),
+                Url = "/images/paintings/image4.jpg",
+                PaintingId = paintingId4
+            };
+            var imagePainting5 = new ImagePainting
+            {
+                Id = Guid.Parse("89152783-b7eb-4ee1-be08-d2b1e44ae58d"),
+                Url = "/images/paintings/image5.jpg",
+                PaintingId = paintingId5
+            };
+            var imagePainting6 = new ImagePainting
+            {
+                Id = Guid.Parse("86ace72f-e08c-42ab-8fb6-13abb11ea178"),
+                Url = "/images/paintings/image6.jpg",
+                PaintingId = paintingId6
+            };
+
+            modelBuilder.Entity<ImagePainting>().HasData(
+                imagePainting1, imagePainting2, imagePainting3, imagePainting4, imagePainting5, imagePainting6
+            );
+
+            modelBuilder.Entity<Painting>().HasData(
+                new Painting
+                {
+                    Id = paintingId1,
+                    Name = "Пряный аромат",
+                    Description = "Холст. Масло. 20х25 см. 2022 г."
+                },
+                new Painting
+                {
+                    Id = paintingId2,
+                    Name = "Северное сияние",
+                    Description = "Холст. Масло. 40х60 см. 2021 г."
+                },
+                new Painting
+                {
+                    Id = paintingId3,
+                    Name = "Городская эстетика",
+                    Description = "Холст. Масло. 20х25 см. 2023 г."
+                },
+                new Painting
+                {
+                    Id = paintingId4,
+                    Name = "Балерина",
+                    Description = "Холст. Масло. 20х25 см. 2023 г."
+                },
+                new Painting
+                {
+                    Id = paintingId5,
+                    Name = "Важный матч",
+                    Description = "Холст. Масло. 50х60. 2021 г."
+                },
+                new Painting
+                {
+                    Id = paintingId6,
+                    Name = "Зимний вечер",
+                    Description = "Холст. Масло. 40х60 см. 2022 г."
+                });
+
+            #endregion
         }
     }
 }
