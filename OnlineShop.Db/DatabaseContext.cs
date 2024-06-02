@@ -32,6 +32,9 @@ namespace OnlineShop.Db
                 .Property(p => p.Cost)
                 .HasColumnType("decimal(18,2)");
 
+            #region Default content for portfolio
+            
+            
             modelBuilder.Entity<Image>().HasOne(p => p.Product).WithMany(p => p.Images)
                 .HasForeignKey(p => p.ProductId).OnDelete(DeleteBehavior.Cascade);
 
@@ -126,7 +129,9 @@ namespace OnlineShop.Db
                         Description = "Набор меловой пастели 48 цв."
                     });
 
-            #region PicturesForPortfolio
+            #endregion
+            
+            #region Default content for portfolio
 
             modelBuilder.Entity<ImagePainting>().HasOne(p => p.Painting).WithMany(p => p.Images)
                 .HasForeignKey(p => p.PaintingId).OnDelete(DeleteBehavior.Cascade);
