@@ -145,7 +145,7 @@ body {
     display: block;
     margin: 10px auto;
 }
-
+/* Портфолио */
 .portfolio-height {
     width: 350px;
     height: 400px;
@@ -159,7 +159,19 @@ body {
     display: block;
     margin: 10px auto;
 }
+/* Услуги */
+.service-height {
+    height: 400px;
+    overflow: hidden;
+}
 
+.service-image {
+    width: 90%;
+    height: 200px;
+    object-fit: cover; /* Масштабирование изображения, сохраняя его пропорции */
+    display: block;
+    margin: 10px auto;
+}
 /* Fonts */
 @font-face {
     font-family: "BebasFont";

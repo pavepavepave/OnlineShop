@@ -60,6 +60,7 @@ namespace OnlineShopWebApp
             services.AddTransient<IPaintingsRepository, PaintingsDbRepository>();
             services.AddTransient<ICartsRepository, CartsDbRepository>();
             services.AddTransient<IOrdersRepository, OrdersDbRepository>();
+            services.AddTransient<IPaintingOrderRepository, PaintingOrderRepository>();
             services.AddTransient<IImagesProvider, ImagesProvider>();
 
             services.AddControllersWithViews()

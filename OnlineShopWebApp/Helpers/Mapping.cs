@@ -240,10 +240,67 @@ namespace OnlineShopWebApp.Helpers
             return paths.Select(x => new ImagePainting { Url = x }).ToList();
         }        
         
-        private static List<string> ToPaths (this List<ImagePainting> paths)
+        private static List<string> ToPaths(this List<ImagePainting> paths)
         {
             return paths.Select(x => x.Url ).ToList();
         }
 
+        #region PaintingOrder
+        
+        public static PaintingOrderVM ToPaintingOrderViewModel(PaintingOrder paintingOrder)
+        {
+            if (paintingOrder == null)
+            {
+                return null;
+            }
+            return new PaintingOrderVM
+            {
+                Id = paintingOrder.Id,
+                UserId = paintingOrder.UserId,
+                Status = (OrderStatus)(int)paintingOrder.Status,
+                DateOrder = paintingOrder.DateOrder,
+                FirstName = paintingOrder.FirstName,
+                SecondName = paintingOrder.SecondName,
+                Address = paintingOrder.Address,
+                Phone = paintingOrder.Phone,
+                Email = paintingOrder.Email,
+                AdditionalContact = paintingOrder.AdditionalContact,
+                PaintingSize = paintingOrder.PaintingSize,
+                PaintingTheme = paintingOrder.PaintingTheme,
+                ColorPalette = paintingOrder.ColorPalette,
+                Description = paintingOrder.Description,
+                AdditionalRequest = paintingOrder.AdditionalRequest,
+                Cost = paintingOrder.Cost
+            };
+        }
+
+        public static List<PaintingOrderVM> ToPaintingOrderViewModels(List<PaintingOrder> orderDbItems)
+        {
+            return orderDbItems.Select(x => ToPaintingOrderViewModel(x)).ToList();
+        }
+
+        public static PaintingOrder ToPaintingOrder(PaintingOrderVM paintingOrderVM, string userId)
+        {
+            var order = new PaintingOrder
+            {
+                UserId = userId,
+                FirstName = paintingOrderVM.FirstName,
+                SecondName = paintingOrderVM.SecondName,
+                Address = paintingOrderVM.Address,
+                Phone = paintingOrderVM.Phone,
+                Email = paintingOrderVM.Email,
+                AdditionalContact = paintingOrderVM.AdditionalContact,
+                PaintingSize = paintingOrderVM.PaintingSize,
+                PaintingTheme = paintingOrderVM.PaintingTheme,
+                ColorPalette = paintingOrderVM.ColorPalette,
+                Description = paintingOrderVM.Description,
+                AdditionalRequest = paintingOrderVM.AdditionalRequest,
+                Cost = paintingOrderVM.Cost
+            };
+            
+            return order;
+        }
+        
+        #endregion
     }
 }

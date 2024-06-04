@@ -1,0 +1,115 @@
+﻿@model PaintingOrderVM
+
+<form method="post">
+    <div class="row">
+        <div class="col-5">
+            <div>
+                <h4>Пожелания к картине:</h4>
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Имя:</span>
+                </div>
+                <input class="form-control" asp-for="FirstName" />
+                <span asp-validation-for="FirstName"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Фамилия:</span>
+                </div>
+                <input class="form-control" asp-for="SecondName" />
+                <span asp-validation-for="SecondName"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Адрес:</span>
+                </div>
+                <input class="form-control" asp-for="Address" />
+                <span asp-validation-for="Address"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Телефон:</span>
+                </div>
+                <input placeholder="+7(XXX)XXX-XX-XX" type="text" id="phone" class="form-control" asp-for="Phone" />
+                <span asp-validation-for="Phone"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">e-mail:</span>
+                </div>
+                <input type="email" placeholder="XXXX@XXXX.XX" class="form-control" asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Дополнительный способ связи:</span>
+                </div>
+                <input class="form-control" asp-for="AdditionalContact" />
+                <span asp-validation-for="AdditionalContact"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Размер картины:</span>
+                </div>
+                <input class="form-control" asp-for="PaintingSize" />
+                <span asp-validation-for="PaintingSize"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Тема картины:</span>
+                </div>
+                <input class="form-control" asp-for="PaintingTheme" />
+                <span asp-validation-for="PaintingTheme"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Цветовая гамма:</span>
+                </div>
+                <input class="form-control" asp-for="ColorPalette" />
+                <span asp-validation-for="ColorPalette"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Описание/пожелания:</span>
+                </div>
+                <textarea class="form-control" asp-for="Description"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+            <br />
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Дополнительное пожелание:</span>
+                </div>
+                <textarea class="form-control" asp-for="AdditionalRequest"></textarea>
+                <span asp-validation-for="AdditionalRequest"></span>
+            </div>
+            <br />
+            <div class="text-center">
+                <button class="btn btn-success" type="submit">Оформить заказ</button>
+                <a class="btn btn-primary" asp-controller="Service" asp-action="Index" role="button">Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/imask"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let phoneInput = document.getElementById("phone");
+        let maskOptions = {
+            mask: "+{7}(000)000-00-00",
+            lazy: false,
+            placeholderChar: '_'
+        };
+        IMask(phoneInput, maskOptions);
+    });
+</script>

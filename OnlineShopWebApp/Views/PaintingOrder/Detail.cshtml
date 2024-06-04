@@ -1,0 +1,52 @@
+﻿@model PaintingOrderVM
+@{
+ViewData["Title"] = "Заказ картины №" + Model.Id;
+}
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+<div class="container mt-5" style="max-width: 800px;">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Спасибо за ваш заказ!</h4>
+        <p>Ожидайте звонка оператора. Цена будет известна после обсуждения заказа.</p>
+        <p>Информацию о заказе можно смотреть в профиле.</p>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Заказ № @Model.Id</h3>
+            <small class="text-muted">от: @Model.DateOrder.ToLocalTime()</small>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Детали заказа</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Фамилия и имя заказчика:</strong> @Model.FirstName @Model.SecondName</li>
+                <li class="list-group-item"><strong>Адрес доставки:</strong> @Model.Address</li>
+                <li class="list-group-item"><strong>Телефон:</strong> @Model.Phone</li>
+                <li class="list-group-item"><strong>Email:</strong> @Model.Email</li>
+                <li class="list-group-item"><strong>Дополнительный способ связи:</strong> @Model.AdditionalContact</li>
+                <li class="list-group-item"><strong>Размер картины:</strong> @Model.PaintingSize</li>
+                <li class="list-group-item"><strong>Тема картины:</strong> @Model.PaintingTheme</li>
+                <li class="list-group-item"><strong>Цветовая гамма:</strong> @Model.ColorPalette</li>
+                <li class="list-group-item"><strong>Описание/пожелания:</strong> @Model.Description</li>
+                <li class="list-group-item"><strong>Дополнительное пожелание:</strong> @Model.AdditionalRequest</li>
+                <li class="list-group-item"><strong>Статус заказа:</strong> @EnumHelper.GetDisplayName(Model.Status)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        padding-bottom: 30px; /* Отступ снизу */
+    }
+
+    .container {
+        margin: 0 auto;
+    }
+
+    .card-header, .card-body {
+        word-wrap: break-word;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

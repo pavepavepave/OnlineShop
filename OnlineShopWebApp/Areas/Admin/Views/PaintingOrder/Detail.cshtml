@@ -1,0 +1,70 @@
+﻿@model PaintingOrderVM
+@{
+ViewData["Title"] = "Заказ № " + @Model.Id;
+}
+<form method="post">
+    <div>
+        <div class="text-center mb-4">
+            <h3>Список заказов</h3>
+        </div>
+        <div class="row">
+            <div class="col-3 border">
+                @await Html.PartialAsync("AdminPanel")
+            </div>
+            <div class="col-9">
+                <div class="mb-4">
+                    <h4>Редактирование заказа:</h4>
+                </div>
+                <div class="mb-3">
+                    <i>ID заказа: @Model.Id от: @Model.DateOrder.ToLocalTime()</i>
+                </div>
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item">
+                        <strong>Фамилия и имя заказчика:</strong> @Model.FirstName @Model.SecondName
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Адрес доставки:</strong> @Model.Address
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Телефон:</strong> @Model.Phone
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Email:</strong> @Model.Email
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Дополнительный способ связи:</strong> @Model.AdditionalContact
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Размер картины:</strong> @Model.PaintingSize
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Тема картины:</strong> @Model.PaintingTheme
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Цветовая гамма:</strong> @Model.ColorPalette
+                    </li>
+                    <li class="list-group-item">
+                        <strong>Статус заказа:</strong>
+                        <select class="form-select" asp-for="Status" asp-items="@Html.GetEnumSelectList<OrderStatus>()">
+                        </select>
+                    </li>
+                    <li class="list-group-item">
+                        <label class="form-label" for="Description">Описание/пожелания:</label>
+                        <input class="form-control" asp-for="Description" value="@Model.Description" id="Description" />
+                    </li>
+                    <li class="list-group-item">
+                        <label class="form-label" for="AdditionalRequest">Дополнительное пожелание:</label>
+                        <input class="form-control" asp-for="AdditionalRequest" value="@Model.AdditionalRequest" id="AdditionalRequest" />
+                    </li>
+                    <li class="list-group-item">
+                        <label class="form-label" for="Cost">Цена:</label>
+                        <input class="form-control" asp-for="Cost" value="@Model.Cost" id="Cost" />
+                    </li>
+                </ul>
+                <div class="text-center">
+                    <button class="btn btn-success" asp-area="Admin" asp-controller="PaintingOrder" asp-action="Edit" asp-route-Id="@Model.Id" type="submit">Изменить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

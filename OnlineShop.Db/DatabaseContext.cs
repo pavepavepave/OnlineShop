@@ -20,6 +20,7 @@ namespace OnlineShop.Db
         public DbSet<CartItem> CartItems { get; set; }
 
         public DbSet<Order> Orders { get; set; }
+        public DbSet<PaintingOrder> PaintingOrder { get; set; }
 
         public DbSet<Image> Images { get; set; }
 
@@ -29,6 +30,10 @@ namespace OnlineShop.Db
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Product>()
+                .Property(p => p.Cost)
+                .HasColumnType("decimal(18,2)"); 
+            
+            modelBuilder.Entity<PaintingOrder>()
                 .Property(p => p.Cost)
                 .HasColumnType("decimal(18,2)");
 
