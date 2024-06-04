@@ -1,0 +1,105 @@
+﻿@model List<OnlineShop.Db.Models.Expense>
+
+<h3>Статистика расходов</h3>
+<div class="d-flex justify-content-between mb-2">
+    <div class="form-group">
+        <label for="filterPeriod">Фильтр по периоду</label>
+        <select class="form-control" id="filterPeriod">
+            <option value="day">По дням</option>
+            <option value="month">По месяцам</option>
+            <option value="year">По годам</option>
+        </select>
+    </div>
+    <button class="btn btn-secondary" id="clearFiltersBtn">Очистить фильтры</button>
+</div>
+
+<canvas id="expenseChart" width="400" height="200"></canvas>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+<script>
+    $(document).ready(function () {
+        var ctx = document.getElementById('expenseChart').getContext('2d');
+        var expenseData = @Html.Raw(Json.Serialize(Model));
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Расходы',
+                    data: [],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'end',
+                        formatter: function(value, context) {
+                            return value.toLocaleString();
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function updateChart(period) {
+            var labels = [];
+            var data = [];
+            var groupedData = groupData(expenseData, period);
+
+            for (var key in groupedData) {
+                if (groupedData.hasOwnProperty(key)) {
+                    labels.push(key);
+                    data.push(groupedData[key]);
+                }
+            }
+
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }
+
+        function groupData(data, period) {
+            var result = {};
+            data.forEach(function (item) {
+                var date = new Date(item.date);
+                var key;
+                if (period === 'day') {
+                    key = date.toLocaleDateString();
+                } else if (period === 'month') {
+                    key = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                } else if (period === 'year') {
+                    key = date.getFullYear();
+                }
+                if (!result[key]) {
+                    result[key] = 0;
+                }
+                result[key] += item.amount;
+            });
+            return result;
+        }
+
+        $('#filterPeriod').on('change', function () {
+            var period = $(this).val();
+            updateChart(period);
+        });
+
+        $('#clearFiltersBtn').on('click', function () {
+            $('#filterPeriod').val('day');
+            updateChart('day');
+        });
+
+        updateChart('day');
+    });
+</script>
+}

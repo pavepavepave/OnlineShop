@@ -1,0 +1,90 @@
+﻿@model OnlineShopWebApp.Areas.Admin.Models.IncomeExpenseBalanceViewModel
+
+<h3>Баланс доходов и расходов</h3>
+<div class="d-flex justify-content-between mb-2">
+    <div class="form-group">
+        <label for="filterPeriod">Фильтр по периоду</label>
+        <select class="form-control" id="filterPeriod">
+            <option value="day">По дням</option>
+            <option value="month">По месяцам</option>
+            <option value="year">По годам</option>
+        </select>
+    </div>
+    <button class="btn btn-secondary" id="clearFiltersBtn">Очистить фильтры</button>
+</div>
+
+<table class="table" id="balanceTable">
+    <thead>
+    <tr>
+        <th>Дата</th>
+        <th>Доходы</th>
+        <th>Расходы</th>
+        <th>Разность</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        var incomes = @Html.Raw(Json.Serialize(Model.Incomes));
+        var expenses = @Html.Raw(Json.Serialize(Model.Expenses));
+        var balanceTable = $('#balanceTable tbody');
+
+        function updateBalanceTable(period) {
+            balanceTable.empty();
+            var groupedIncomes = groupData(incomes, period);
+            var groupedExpenses = groupData(expenses, period);
+
+            var allKeys = new Set([...Object.keys(groupedIncomes), ...Object.keys(groupedExpenses)]);
+
+            allKeys.forEach(function (key) {
+                var incomeAmount = groupedIncomes[key] || 0;
+                var expenseAmount = groupedExpenses[key] || 0;
+                var balanceAmount = incomeAmount - expenseAmount;
+                var row = `<tr>
+                        <td>${key}</td>
+                        <td>${incomeAmount.toLocaleString()}</td>
+                        <td>${expenseAmount.toLocaleString()}</td>
+                        <td>${balanceAmount.toLocaleString()}</td>
+                    </tr>`;
+                balanceTable.append(row);
+            });
+        }
+
+        function groupData(data, period) {
+            var result = {};
+            data.forEach(function (item) {
+                var date = new Date(item.date);
+                var key;
+                if (period === 'day') {
+                    key = date.toLocaleDateString();
+                } else if (period === 'month') {
+                    key = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                } else if (period === 'year') {
+                    key = date.getFullYear().toString();
+                }
+                if (!result[key]) {
+                    result[key] = 0;
+                }
+                result[key] += item.amount;
+            });
+            return result;
+        }
+
+        $('#filterPeriod').on('change', function () {
+            var period = $(this).val();
+            updateBalanceTable(period);
+        });
+
+        $('#clearFiltersBtn').on('click', function () {
+            $('#filterPeriod').val('day');
+            updateBalanceTable('day');
+        });
+
+        updateBalanceTable('day');
+    });
+</script>
+}
