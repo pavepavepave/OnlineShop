@@ -105,44 +105,44 @@ namespace OnlineShop.Db
                     new Product
                     {
                         Id = productId1,
-                        Name = "Гуашь художественная, набор из 5 цветов",
-                        Cost = 400,
-                        Description = "Набор гуаши 5 цветов, художественная 40 мл."
+                        Name = "Закат",
+                        Cost = 15000,
+                        Description = "Холст. Масло. 30х40 см."
                     },
                     new Product
                     {
                         Id = productId2,
-                        Name = "Краска акварель",
-                        Cost = 810,
-                        Description = "Краски акварельные для рисования 24 цвета."
+                        Name = "В минуты отдыха",
+                        Cost = 10000,
+                        Description = "х/м 25х30 2022г."
                     },
                     new Product
                     {
                         Id = productId3,
-                        Name = "Краски акриловые, 5х50 мл",
-                        Cost = 2000,
-                        Description = "5 цветов, 50 мл."
+                        Name = "Олива в Гефсиманском саду",
+                        Cost = 25000,
+                        Description = "Копия. Х/м 30х40 2021г."
                     },
                     new Product
                     {
                         Id = productId4,
-                        Name = "Набор масляных красок, 10 цветов",
-                        Cost = 1950,
-                        Description = "Краски масляные художественные для рисования, набор из 10 цветов."
+                        Name = "Ландыши",
+                        Cost = 15000,
+                        Description = "Холст. Масло. 30х40."
                     },
                     new Product
                     {
                         Id = productId5,
-                        Name = "Набор сухой пастели, 24 цвета",
-                        Cost = 750,
-                        Description = "Набор пастели 24 цвета."
+                        Name = "Голландский натюрморт",
+                        Cost = 15000,
+                        Description = "Холст. Масло. 30х40 2021г."
                     },
                     new Product
                     {
                         Id = productId6,
-                        Name = "Набор меловой пастели",
-                        Cost = 910,
-                        Description = "Набор меловой пастели 48 цв."
+                        Name = "Взломщик",
+                        Cost = 17500,
+                        Description = "Холст. Масло. 30х40 2023 г."
                     });
 
             #endregion

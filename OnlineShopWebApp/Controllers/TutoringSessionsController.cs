@@ -5,6 +5,7 @@ using OnlineShop.Db.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineShopWebApp.Controllers
 {
@@ -19,6 +20,7 @@ namespace OnlineShopWebApp.Controllers
             _timeSlotRepository = timeSlotRepository;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Create(DateTime? date, string serviceType)
         {
@@ -36,6 +38,7 @@ namespace OnlineShopWebApp.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(TutoringSession session)
         {
@@ -65,6 +68,7 @@ namespace OnlineShopWebApp.Controllers
             return View(session);
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Check(Guid bookingId)
         {
