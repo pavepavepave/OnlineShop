@@ -64,6 +64,8 @@ namespace OnlineShopWebApp
             services.AddTransient<IImagesProvider, ImagesProvider>();
             services.AddTransient<ITutoringSessionRepository, TutoringSessionRepository>();
             services.AddTransient<ITimeSlotRepository, TimeSlotRepository>();
+            services.AddTransient<IIncomeRepository, IncomeRepository>();
+            services.AddTransient<IExpenseRepository, ExpenseRepository>();
 
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation()

@@ -1,0 +1,258 @@
+﻿@model List<OnlineShop.Db.Models.Income>
+
+<h3>Доходы</h3>
+<div class="d-flex justify-content-between mb-2">
+    <button class="btn btn-info" id="toggleFiltersBtn">Фильтры</button>
+    <button class="btn btn-primary" id="addIncomeBtn" data-toggle="modal" data-target="#addIncomeModal">Добавить доход</button>
+</div>
+
+<div id="filtersSection" class="mb-3" style="display: none;">
+    <div class="form-group">
+        <label for="filterDay">Фильтр по дню</label>
+        <input type="date" class="form-control" id="filterDay" />
+    </div>
+    <div class="form-group">
+        <label for="filterMonth">Фильтр по месяцу</label>
+        <input type="month" class="form-control" id="filterMonth" />
+    </div>
+    <div class="form-group">
+        <label for="filterYear">Фильтр по году</label>
+        <select class="form-control" id="filterYear">
+            <option value="">Все годы</option>
+            @for (var year = DateTime.Now.Year; year >= 2000; year--)
+            {
+            <option value="@year">@year</option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-secondary" id="clearFiltersBtn">Очистить фильтры</button>
+</div>
+
+<table class="table" id="incomesTable">
+    <thead>
+    <tr>
+        <th>Дата</th>
+        <th>Сумма</th>
+        <th>Описание</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var income in Model)
+    {
+    <tr>
+        <td>@income.Date.ToString("dd/MM/yyyy")</td>
+        <td>@income.Amount</td>
+        <td>@(income.Description?.Length > 30 ? income.Description.Substring(0, 30) + "..." : income.Description ?? string.Empty)</td>
+        <td>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#editIncomeModal" onclick="openEditIncomeModal('@income.Id')">Редактировать</button> |
+            <button class="btn btn-danger" onclick="deleteIncome('@income.Id')">Удалить</button>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+<div class="text-right">
+    <strong>Итоговая сумма: <span id="totalSum"></span></strong>
+</div>
+
+<!-- Модальное окно для добавления доходов -->
+<div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addIncomeModalLabel">Добавить доход</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addIncomeForm">
+                    <div class="form-group">
+                        <label for="incomeDate">Дата</label>
+                        <input type="date" class="form-control" id="incomeDate" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeAmount">Сумма</label>
+                        <input type="number" class="form-control" id="incomeAmount" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeDescription">Описание</label>
+                        <input type="text" class="form-control" id="incomeDescription" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования доходов -->
+<div class="modal fade" id="editIncomeModal" tabindex="-1" role="dialog" aria-labelledby="editIncomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editIncomeModalLabel">Редактировать доход</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editIncomeForm" method="post">
+                    <input type="hidden" id="editIncomeId" name="Id" />
+                    <div class="form-group">
+                        <label for="editIncomeDate">Дата</label>
+                        <input type="date" class="form-control" id="editIncomeDate" name="Date" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="editIncomeAmount">Сумма</label>
+                        <input type="number" class="form-control" id="editIncomeAmount" name="Amount" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="editIncomeDescription">Описание</label>
+                        <input type="text" class="form-control" id="editIncomeDescription" name="Description" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        $('#toggleFiltersBtn').on('click', function () {
+            $('#filtersSection').toggle();
+        });
+
+        $('#clearFiltersBtn').on('click', function () {
+            $('#filterDay').val('');
+            $('#filterMonth').val('');
+            $('#filterYear').val('');
+            filterIncomes();
+        });
+
+        $('#addIncomeForm').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/Admin/Finance/AddIncome',
+                type: 'POST',
+                data: {
+                    Date: $('#incomeDate').val(),
+                    Amount: $('#incomeAmount').val(),
+                    Description: $('#incomeDescription').val()
+                },
+                success: function (data) {
+                    updateIncomesTable(data); // обновление таблицы
+                    $('#addIncomeModal').modal('hide');
+                }
+            });
+        });
+
+        $('#editIncomeForm').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/Admin/Finance/EditIncome',
+                type: 'POST',
+                data: {
+                    Id: $('#editIncomeId').val(),
+                    Date: $('#editIncomeDate').val(),
+                    Amount: $('#editIncomeAmount').val(),
+                    Description: $('#editIncomeDescription').val()
+                },
+                success: function (data) {
+                    $('#editIncomeModal').modal('hide');
+                    updateIncomesTable(data); // обновление таблицы
+                }
+            });
+        });
+
+        $('#filterDay, #filterMonth, #filterYear').on('change', function () {
+            filterIncomes();
+        });
+
+        updateTotalSum();
+    });
+
+    function openEditIncomeModal(id) {
+        $.get('/Admin/Finance/GetIncomeById/' + id, function (data) {
+            $('#editIncomeId').val(data.id);
+            $('#editIncomeDate').val(data.date.split('T')[0]);
+            $('#editIncomeAmount').val(data.amount);
+            $('#editIncomeDescription').val(data.description);
+            $('#editIncomeForm').attr('action', '/Admin/Finance/EditIncome');
+        });
+    }
+
+    function deleteIncome(id) {
+        if (confirm('Вы уверены, что хотите удалить этот доход?')) {
+            $.ajax({
+                url: '/Admin/Finance/DeleteIncome/' + id,
+                type: 'POST',
+                success: function (data) {
+                    updateIncomesTable(data); // обновление таблицы
+                }
+            });
+        }
+    }
+
+    function filterIncomes() {
+        var filterDay = $('#filterDay').val();
+        var filterMonth = $('#filterMonth').val();
+        var filterYear = $('#filterYear').val();
+
+        $('#incomesTable tbody tr').each(function () {
+            var rowDate = $(this).find('td:first').text().split('.').reverse().join('-');
+            var showRow = true;
+
+            if (filterDay && rowDate !== filterDay) {
+                showRow = false;
+            }
+
+            if (filterMonth && rowDate.substr(0, 7) !== filterMonth) {
+                showRow = false;
+            }
+
+            if (filterYear && rowDate.substr(0, 4) !== filterYear) {
+                showRow = false;
+            }
+
+            if (showRow) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        updateTotalSum();
+    }
+
+    function updateIncomesTable(data) {
+        var tbody = $('#incomesTable tbody');
+        tbody.empty();
+        $.each(data, function (index, income) {
+            var description = income.description && income.description.length > 30 ? income.description.substring(0, 30) + "..." : income.description || "";
+            var row = `<tr>
+                    <td>${new Date(income.date).toLocaleDateString()}</td>
+                    <td>${income.amount}</td>
+                    <td>${description}</td>
+                    <td>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#editIncomeModal" onclick="openEditIncomeModal('${income.id}')">Редактировать</button> |
+                        <button class="btn btn-danger" onclick="deleteIncome('${income.id}')">Удалить</button>
+                    </td>
+                </tr>`;
+            tbody.append(row);
+        });
+        updateTotalSum();
+    }
+
+    function updateTotalSum() {
+        var totalSum = 0;
+        $('#incomesTable tbody tr:visible').each(function () {
+            var amount = parseFloat($(this).find('td:nth-child(2)').text().replace(',', '.'));
+            totalSum += amount;
+        });
+        $('#totalSum').text(totalSum.toFixed(2));
+    }
+</script>
+}

@@ -32,6 +32,10 @@ namespace OnlineShop.Db
         // Свободное время для записи
         public DbSet<TimeSlot> TimeSlots { get; set; }
 
+        public DbSet<Income> Incomes { get; set; }
+        
+        public DbSet<Expense> Expenses { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

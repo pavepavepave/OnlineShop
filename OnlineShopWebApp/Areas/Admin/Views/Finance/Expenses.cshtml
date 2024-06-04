@@ -1,0 +1,258 @@
+﻿@model List<OnlineShop.Db.Models.Expense>
+
+<h3>Расходы</h3>
+<div class="d-flex justify-content-between mb-2">
+    <button class="btn btn-info" id="toggleFiltersBtn">Фильтры</button>
+    <button class="btn btn-primary" id="addExpenseBtn" data-toggle="modal" data-target="#addExpenseModal">Добавить расход</button>
+</div>
+
+<div id="filtersSection" class="mb-3" style="display: none;">
+    <div class="form-group">
+        <label for="filterDay">Фильтр по дню</label>
+        <input type="date" class="form-control" id="filterDay" />
+    </div>
+    <div class="form-group">
+        <label for="filterMonth">Фильтр по месяцу</label>
+        <input type="month" class="form-control" id="filterMonth" />
+    </div>
+    <div class="form-group">
+        <label for="filterYear">Фильтр по году</label>
+        <select class="form-control" id="filterYear">
+            <option value="">Все годы</option>
+            @for (var year = DateTime.Now.Year; year >= 2000; year--)
+            {
+            <option value="@year">@year</option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-secondary" id="clearFiltersBtn">Очистить фильтры</button>
+</div>
+
+<table class="table" id="expensesTable">
+    <thead>
+    <tr>
+        <th>Дата</th>
+        <th>Сумма</th>
+        <th>Описание</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var expense in Model)
+    {
+    <tr>
+        <td>@expense.Date.ToString("dd/MM/yyyy")</td>
+        <td>@expense.Amount</td>
+        <td>@(expense.Description?.Length > 30 ? expense.Description.Substring(0, 30) + "..." : expense.Description ?? string.Empty)</td>
+        <td>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#editExpenseModal" onclick="openEditExpenseModal('@expense.Id')">Редактировать</button> |
+            <button class="btn btn-danger" onclick="deleteExpense('@expense.Id')">Удалить</button>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
+<div class="text-right">
+    <strong>Итоговая сумма: <span id="totalSum"></span></strong>
+</div>
+
+<!-- Модальное окно для добавления расходов -->
+<div class="modal fade" id="addExpenseModal" tabindex="-1" role="dialog" aria-labelledby="addExpenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addExpenseModalLabel">Добавить расход</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addExpenseForm">
+                    <div class="form-group">
+                        <label for="expenseDate">Дата</label>
+                        <input type="date" class="form-control" id="expenseDate" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="expenseAmount">Сумма</label>
+                        <input type="number" class="form-control" id="expenseAmount" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="expenseDescription">Описание</label>
+                        <input type="text" class="form-control" id="expenseDescription" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Добавить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для редактирования расходов -->
+<div class="modal fade" id="editExpenseModal" tabindex="-1" role="dialog" aria-labelledby="editExpenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editExpenseModalLabel">Редактировать расход</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editExpenseForm" method="post">
+                    <input type="hidden" id="editExpenseId" name="Id" />
+                    <div class="form-group">
+                        <label for="editExpenseDate">Дата</label>
+                        <input type="date" class="form-control" id="editExpenseDate" name="Date" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="editExpenseAmount">Сумма</label>
+                        <input type="number" class="form-control" id="editExpenseAmount" name="Amount" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="editExpenseDescription">Описание</label>
+                        <input type="text" class="form-control" id="editExpenseDescription" name="Description" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        $('#toggleFiltersBtn').on('click', function () {
+            $('#filtersSection').toggle();
+        });
+
+        $('#clearFiltersBtn').on('click', function () {
+            $('#filterDay').val('');
+            $('#filterMonth').val('');
+            $('#filterYear').val('');
+            filterExpenses();
+        });
+
+        $('#addExpenseForm').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/Admin/Finance/AddExpense',
+                type: 'POST',
+                data: {
+                    Date: $('#expenseDate').val(),
+                    Amount: $('#expenseAmount').val(),
+                    Description: $('#expenseDescription').val()
+                },
+                success: function (data) {
+                    updateExpensesTable(data); // обновление таблицы
+                    $('#addExpenseModal').modal('hide');
+                }
+            });
+        });
+
+        $('#editExpenseForm').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/Admin/Finance/EditExpense',
+                type: 'POST',
+                data: {
+                    Id: $('#editExpenseId').val(),
+                    Date: $('#editExpenseDate').val(),
+                    Amount: $('#editExpenseAmount').val(),
+                    Description: $('#editExpenseDescription').val()
+                },
+                success: function (data) {
+                    $('#editExpenseModal').modal('hide');
+                    updateExpensesTable(data); // обновление таблицы
+                }
+            });
+        });
+
+        $('#filterDay, #filterMonth, #filterYear').on('change', function () {
+            filterExpenses();
+        });
+
+        updateTotalSum();
+    });
+
+    function openEditExpenseModal(id) {
+        $.get('/Admin/Finance/GetExpenseById/' + id, function (data) {
+            $('#editExpenseId').val(data.id);
+            $('#editExpenseDate').val(data.date.split('T')[0]);
+            $('#editExpenseAmount').val(data.amount);
+            $('#editExpenseDescription').val(data.description);
+            $('#editExpenseForm').attr('action', '/Admin/Finance/EditExpense');
+        });
+    }
+
+    function deleteExpense(id) {
+        if (confirm('Вы уверены, что хотите удалить этот расход?')) {
+            $.ajax({
+                url: '/Admin/Finance/DeleteExpense/' + id,
+                type: 'POST',
+                success: function (data) {
+                    updateExpensesTable(data); // обновление таблицы
+                }
+            });
+        }
+    }
+
+    function filterExpenses() {
+        var filterDay = $('#filterDay').val();
+        var filterMonth = $('#filterMonth').val();
+        var filterYear = $('#filterYear').val();
+
+        $('#expensesTable tbody tr').each(function () {
+            var rowDate = $(this).find('td:first').text().split('.').reverse().join('-');
+            var showRow = true;
+
+            if (filterDay && rowDate !== filterDay) {
+                showRow = false;
+            }
+
+            if (filterMonth && rowDate.substr(0, 7) !== filterMonth) {
+                showRow = false;
+            }
+
+            if (filterYear && rowDate.substr(0, 4) !== filterYear) {
+                showRow = false;
+            }
+
+            if (showRow) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        updateTotalSum();
+    }
+
+    function updateExpensesTable(data) {
+        var tbody = $('#expensesTable tbody');
+        tbody.empty();
+        $.each(data, function (index, expense) {
+            var description = expense.description && expense.description.length > 30 ? expense.description.substring(0, 30) + "..." : expense.description || "";
+            var row = `<tr>
+                    <td>${new Date(expense.date).toLocaleDateString()}</td>
+                    <td>${expense.amount}</td>
+                    <td>${description}</td>
+                    <td>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#editExpenseModal" onclick="openEditExpenseModal('${expense.id}')">Редактировать</button> |
+                        <button class="btn btn-danger" onclick="deleteExpense('${expense.id}')">Удалить</button>
+                    </td>
+                </tr>`;
+            tbody.append(row);
+        });
+        updateTotalSum();
+    }
+
+    function updateTotalSum() {
+        var totalSum = 0;
+        $('#expensesTable tbody tr:visible').each(function () {
+            var amount = parseFloat($(this).find('td:nth-child(2)').text().replace(',', '.'));
+            totalSum += amount;
+        });
+        $('#totalSum').text(totalSum.toFixed(2));
+    }
+</script>
+}

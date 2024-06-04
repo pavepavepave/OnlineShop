@@ -22,6 +22,13 @@
             <li class="list-group-item">
                 <a asp-area="Admin" asp-controller="Painting" asp-action="Index" role="button">Портфолио</a>
             </li>
+            <li class="list-group-item dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Финансы</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" asp-area="Admin" asp-controller="Finance" asp-action="Incomes">Доходы</a>
+                    <a class="dropdown-item" asp-area="Admin" asp-controller="Finance" asp-action="Expenses">Расходы</a>
+                </div>
+            </li>
         </ul>
     </div>
-</div>    
+</div>
