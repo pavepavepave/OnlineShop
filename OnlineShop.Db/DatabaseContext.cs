@@ -25,6 +25,12 @@ namespace OnlineShop.Db
         public DbSet<Image> Images { get; set; }
 
         public DbSet<ImagePainting> ImagesPaintings { get; set; }
+        
+        // Запись на репетиторство
+        public DbSet<TutoringSession> TutoringSessions { get; set; }
+
+        // Свободное время для записи
+        public DbSet<TimeSlot> TimeSlots { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,8 +43,13 @@ namespace OnlineShop.Db
                 .Property(p => p.Cost)
                 .HasColumnType("decimal(18,2)");
 
-            #region Default content for portfolio
+            modelBuilder.Entity<TutoringSession>()
+                .HasOne(ts => ts.TimeSlot)
+                .WithMany(ts => ts.TutoringSessions)
+                .HasForeignKey(ts => ts.TimeSlotId)
+                .OnDelete(DeleteBehavior.Cascade);
             
+            #region Default content for portfolio
             
             modelBuilder.Entity<Image>().HasOne(p => p.Product).WithMany(p => p.Images)
                 .HasForeignKey(p => p.ProductId).OnDelete(DeleteBehavior.Cascade);
@@ -228,6 +239,15 @@ namespace OnlineShop.Db
                 });
 
             #endregion
+            
+            modelBuilder.Entity<TimeSlot>().HasData(
+                new TimeSlot { Id = 1, StartTime = new TimeSpan(9, 0, 0), EndTime = new TimeSpan(10, 30, 0) },
+                new TimeSlot { Id = 2, StartTime = new TimeSpan(10, 30, 0), EndTime = new TimeSpan(12, 0, 0) },
+                new TimeSlot { Id = 3, StartTime = new TimeSpan(13, 0, 0), EndTime = new TimeSpan(14, 30, 0) },
+                new TimeSlot { Id = 4, StartTime = new TimeSpan(14, 30, 0), EndTime = new TimeSpan(16, 0, 0) },
+                new TimeSlot { Id = 5, StartTime = new TimeSpan(16, 0, 0), EndTime = new TimeSpan(17, 30, 0) },
+                new TimeSlot { Id = 6, StartTime = new TimeSpan(17, 30, 0), EndTime = new TimeSpan(19, 0, 0) }
+            );
         }
     }
 }

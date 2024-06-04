@@ -1,0 +1,46 @@
+﻿@model OnlineShop.Db.Models.TutoringSession
+
+<div>
+    <div>
+        <h3 class="text-center">Редактировать запись</h3>
+    </div>
+    <div class="row">
+        <div class="border">
+            @await Html.PartialAsync("AdminPanel")
+        </div>
+        <div class="col-9">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="LastName">Фамилия</label>
+                    <input asp-for="LastName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FirstName">Имя</label>
+                    <input asp-for="FirstName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Patronymic">Отчество</label>
+                    <input asp-for="Patronymic" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber">Номер телефона</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Date">Дата</label>
+                    <input asp-for="Date" type="date" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="TimeSlotId">Время</label>
+                    <select asp-for="TimeSlotId" asp-items="ViewBag.TimeSlots" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ServiceType">Тип услуги</label>
+                    <select asp-for="ServiceType" asp-items="ViewBag.ServiceTypes" class="form-control"></select>
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+            </form>
+        </div>
+    </div>
+</div>

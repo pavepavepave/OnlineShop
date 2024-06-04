@@ -1,0 +1,65 @@
+﻿@model IEnumerable<OnlineShop.Db.Models.TutoringSession>
+
+<div>
+    <div>
+        <h3 class="text-center">Список записей</h3>
+    </div>
+    <div class="row">
+        <div class="border">
+            @await Html.PartialAsync("AdminPanel")
+        </div>
+        <div class="col-9">
+            <div>
+                <div>
+                    <a asp-area="Admin" asp-controller="TutoringSessions" asp-action="Create">Добавить новую запись</a>
+                </div>
+                @if (!Model.Any())
+                {
+                <div class="text-center">
+                    <span>Список записей пуст.</span>
+                </div>
+                }
+                else
+                {
+                <div class="col">
+                    <table class="table border">
+                        <thead>
+                        <tr>
+                            <th>Фамилия</th>
+                            <th>Имя</th>
+                            <th>Отчество</th>
+                            <th>Номер телефона</th>
+                            <th>Дата</th>
+                            <th>Время</th>
+                            <th>Тип услуги</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var session in Model)
+                        {
+                        <tr>
+                            <td>@session.LastName</td>
+                            <td>@session.FirstName</td>
+                            <td>@session.Patronymic</td>
+                            <td>@session.PhoneNumber</td>
+                            <td>@session.Date.ToShortDateString()</td>
+                            <td>@session.TimeSlot.StartTime - @session.TimeSlot.EndTime</td>
+                            <td>@session.ServiceType</td>
+                            <td>
+                                <a asp-area="Admin" asp-controller="TutoringSessions" asp-action="Edit" asp-route-id="@session.Id" class="btn btn-warning">Изменить</a>
+                                <form asp-area="Admin" asp-controller="TutoringSessions" asp-action="Cancel" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@session.Id" />
+                                    <button type="submit" class="btn btn-danger">Отменить</button>
+                                </form>
+                            </td>
+                        </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

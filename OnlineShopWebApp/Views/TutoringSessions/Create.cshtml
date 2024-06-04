@@ -1,0 +1,47 @@
+﻿@model OnlineShop.Db.Models.TutoringSession
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="LastName">Фамилия</label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="FirstName">Имя</label>
+        <input asp-for="FirstName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Patronymic">Отчество</label>
+        <input asp-for="Patronymic" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber">Номер телефона</label>
+        <input asp-for="PhoneNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Date">Дата</label>
+        <input asp-for="Date" type="date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="TimeSlotId">Время</label>
+        <select asp-for="TimeSlotId" asp-items="ViewBag.TimeSlots" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="ServiceType">Тип услуги</label>
+        <select asp-for="ServiceType" asp-items="ViewBag.ServiceTypes" class="form-control" onchange="updateTimeSlots()"></select>
+    </div>
+    <button type="submit" class="btn btn-primary">Записаться</button>
+</form>
+
+@section Scripts {
+<script>
+    function updateTimeSlots() {
+        const date = document.querySelector('input[name="Date"]').value;
+        const serviceType = document.querySelector('select[name="ServiceType"]').value;
+        const url = `@Url.Action("Create", "TutoringSessions")?date=${date}&serviceType=${serviceType}`;
+        window.location.href = url;
+    }
+
+    document.querySelector('input[name="Date"]').addEventListener('change', updateTimeSlots);
+    document.querySelector('select[name="ServiceType"]').addEventListener('change', updateTimeSlots);
+</script>
+}

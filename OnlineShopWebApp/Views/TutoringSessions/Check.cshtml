@@ -1,0 +1,11 @@
+﻿@model OnlineShop.Db.Models.TutoringSession
+
+<h2>Информация о записи</h2>
+<p>Фамилия: @Model.LastName</p>
+<p>Имя: @Model.FirstName</p>
+<p>Отчество: @Model.Patronymic</p>
+<p>Номер телефона: @Model.PhoneNumber</p>
+<p>Дата: @Model.Date.ToShortDateString()</p>
+<p>Время: @Model.TimeSlot.StartTime - @Model.TimeSlot.EndTime</p>
+<p>Тип услуги: @Model.ServiceType</p>
+<p>Идентификатор записи: @Model.BookingId</p>
